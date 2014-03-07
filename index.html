@@ -1,0 +1,44 @@
+<html>
+<head>
+<title>dnamer.net usage</title>
+<body>
+<h1>dnamer.net</h1>
+<p>I am a dynamic naming service. The API is simple and fully based on HTTP POST.
+<p>My job is to make <strong>$yourdomain.dnamer.net</strong> your dynamic name.
+<h2>Apply a new domain</h2>
+<pre>token=$(curl -d "domain=$yourdomain" dnamer.net/new)</pre>
+<h2>Update IP of your domain</h2>
+<p>Let our server determine your IPv4 or IPv6 address:</p>
+<pre>curl -d "domain=$yourdomain&amp;token=$token" dnamer.net/update</pre>
+<p>Use a specific IPv4 address $ipv4_addr and do not resolve IPv6:</p>
+<pre>curl -d "domain=$yourdomain&amp;token=$token&amp;ipv4=$ipv4_addr&amp;ipv6=remove" dnamer.net/update</pre>
+<p>Use a specific IPv4 address $ipv4_addr and a specific IPv6 address $ipv6_addr:</p>
+<pre>curl -d "domain=$yourdomain&amp;token=$token&amp;ipv4=$ipv4_addr&amp;ipv6=$ipv6_addr" dnamer.net/update</pre>
+<p>Remove IPv6 record and keep IPv4 address unchanged:</p>
+<pre>curl -d "domain=$yourdomain&amp;token=$token&amp;ipv6=remove&amp;ipv4=keep" dnamer.net/update</pre>
+<p>The DNS record will be updated immediately. Due to DNS cache, it may take up to 10 seconds to take effect.
+<h3>DNS update semantics (IPv4 for example)</h3>
+<pre>
+if ($ipv4 == "keep")
+        no change;
+else if ($ipv4 == "remove")
+        remove the record;
+else if ($ipv4 is a valid IP)
+        update to $ipv4;
+else if (client is connected via IPv4)
+        update to server-determined IPv4 address;
+else  // client is connected via IPv6
+        no change;
+</pre>
+<h2>Get IP of yourself</h2>
+<pre>curl dnamer.net/myip</pre>
+<h2>Troubleshooting</h2>
+<ul>
+<li>When a new domain is applied, it is NOT reserved to you. (Others may take it as well) You must execute at least one "update" command to activate this domain.</li>
+<li>If you have tried to visit $yourdomain.dnamer.net prior to activation of the domain, the DNS system will have a negative cache and you won't be able to resolve the domain in an hour.</li>
+<li>All error messages start with "ERROR" and you may use it in automated scripts. The "new" command will return a token on success. The "update" command will return "OK" on success.</li>
+</ul>
+<hr />
+<p>Brought to you by <a href="http://freeshell.ustc.edu.cn/">USTC Freeshell</a>.</p>
+</body>
+</html>
