@@ -8,8 +8,10 @@
 <h2>Apply a new domain</h2>
 <pre>token=$(curl -d "domain=$yourdomain" dnamer.net/new)</pre>
 <h2>Update IP of your domain</h2>
-<p>Let our server determine your IPv4 or IPv6 address:</p>
+<p>Let our server determine your IPv4 or IPv6 address (depending on whether you are using IPv4 or IPv6 to access <code>dnamer.net</code>, if you have IPv6 access, <code>curl</code> will use IPv6 by default):</p>
 <pre>curl -d "domain=$yourdomain&amp;token=$token" dnamer.net/update</pre>
+<p>Let our server determine your IPv4 address and leave IPv6 untouched:</p>
+<pre>curl -4 -d "domain=$yourdomain&amp;token=$token" dnamer.net/update</pre>
 <p>Use a specific IPv4 address $ipv4_addr and do not resolve IPv6:</p>
 <pre>curl -d "domain=$yourdomain&amp;token=$token&amp;ipv4=$ipv4_addr&amp;ipv6=remove" dnamer.net/update</pre>
 <p>Use a specific IPv4 address $ipv4_addr and a specific IPv6 address $ipv6_addr:</p>
