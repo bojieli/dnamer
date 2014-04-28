@@ -30,6 +30,8 @@ else if (client is connected via IPv4)
 else  // client is connected via IPv6
         no change;
 </pre>
+<h2>Delete your domain</h2>
+<pre>curl -d "domain=$yourdomain&amp;token=$token" dnamer.net/delete</pre>
 <h2>Get IP of yourself</h2>
 <pre>curl dnamer.net/myip</pre>
 <h2>Troubleshooting</h2>
