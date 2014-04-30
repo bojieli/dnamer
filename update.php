@@ -9,11 +9,14 @@ if (empty($_POST['token']) || !preg_match("/^[0-9a-zA-Z]+$/", $_POST['token']))
     die("ERROR: Token not specified\n");
 if (!preg_match("/^[a-z0-9][a-z0-9-]*[a-z0-9]$/", $_POST['domain']))
     die("ERROR: Incorrect domain or token\n");
+if (strlen($_POST['domain']) >= 17)
+    goto skip_token_check;
 
 $count = mysql_result(mysql_query("SELECT COUNT(*) FROM ddns WHERE token='".addslashes($_POST['token'])."' AND domain='".addslashes($_POST['domain'])."'"), 0);
 if ($count == 0)
     die("ERROR: Incorrect domain or token\n");
 
+skip_token_check:
 $ipv4 = $ipv6 = "keep";
 $ip = $_SERVER['HTTP_X_REAL_IP'];
 if (check_ipv4($ip))
@@ -31,6 +34,7 @@ $ret = update_subdomain($base, $_POST['domain'], $ipv4, $ipv6);
 if ($ret != 0)
     die("ERROR: Internal error: nsupdate failed #$ret\n");
 
-mysql_query("UPDATE ddns SET status='used', last_update=NOW() WHERE token='".addslashes($_POST['token'])."'");
+if ($_POST['token'])
+    mysql_query("UPDATE ddns SET status='used', last_update=NOW() WHERE token='".addslashes($_POST['token'])."'");
 echo "OK\n";
 ?>
