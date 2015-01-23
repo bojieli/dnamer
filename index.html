@@ -5,6 +5,23 @@
 <h1>dnamer.net</h1>
 <p>I am a dynamic naming service. The API is simple and fully based on HTTP POST.
 <p>My job is to make <strong>$yourdomain.dnamer.net</strong> your dynamic name.
+<h2>Basic HOWTO</h2>
+<ol>
+<li>Dependency: <code>curl</code>.</li>
+<li>First, you need to apply a domain name <code>$yourdomain.dnamer.net</code> (change <code>$yourdomain</code> to a name you want):
+<pre>curl -d "domain=$yourdomain" dnamer.net/new</pre>
+You would see a random string and this is your secret token. If the string starts with "ERROR", then something bad happens.</li>
+<li>Second, report your IP address to <code>dnamer.net</code>.
+<pre>curl -d "domain=$yourdomain&amp;token=$token" dnamer.net/update</pre>
+(change <code>$yourdomain</code> and <code>$token</code> to the above ones) If it returns "OK", everything is fine.</li>
+<li>Finally, you need to set up <code>crontab</code> to report your IP address to <code>dnamer.net</code> routinely, so that we would update your IP address accordingly (up to 10 seconds to take effect).
+Run <code>crontab -e</code>, append a following line, save and exit (report IP every 5 minutes):
+<pre>*/5 * * * * curl -d "domain=$yourdomain&amp;token=$token" dnamer.net/update &gt;/dev/null</pre>
+(change <code>$yourdomain</code> and <code>$token</code> to the above ones)
+</li>
+<li>You can access <code>$yourdomain.dnamer.net</code> now. You may run <code>nslookup $yourdomain.dnamer.net</code> to get the latest IP address.</li>
+</ol>
+<h1>Usage Details</h1>
 <h2>Apply a new domain</h2>
 <pre>token=$(curl -d "domain=$yourdomain" dnamer.net/new)</pre>
 <h2>Update IP of your domain</h2>
