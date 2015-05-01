@@ -16,8 +16,14 @@ $count = mysql_result(mysql_query("SELECT COUNT(*) FROM ddns WHERE domain='".add
 if ($count > 0)
     die("ERROR: Sorry, the domain has been used\n");
 
-$token = random_string(20);
-mysql_query("REPLACE INTO ddns SET domain='".addslashes($_POST['domain'])."', status='unused', token='$token', create_time=NOW()");
+if (!empty($_POST['token'])) {
+    if (strlen($_POST['token']) < 6 || strlen($_POST['token']) > 20 || !preg_match("/^[0-9a-zA-Z]+$/", $_POST['token']))
+        die("ERROR: Token must be no less than 6 characters, no more than 20 characters, and only contain numbers and letters\n");
+    $token = $_POST['token'];
+}
+else
+    $token = random_string(20);
+mysql_query("REPLACE INTO ddns SET domain='".mysql_real_escape_string($_POST['domain'])."', status='unused', token='".mysql_real_escape_string($token)."', create_time=NOW()");
 echo "$token\n";
 
 function random_string($length) {
