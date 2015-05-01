@@ -22,7 +22,7 @@ Run <code>crontab -e</code>, append a following line, save and exit (report IP e
 <li>You can access <code>$yourdomain.dnamer.net</code> now. You may run <code>nslookup $yourdomain.dnamer.net</code> to get the latest IP address.</li>
 </ol>
 <h1>Usage Details</h1>
-<h2>Apply a new domain</h2>
+<h2>Apply for a new domain</h2>
 <pre>token=$(curl -d "domain=$yourdomain" dnamer.net/new)</pre>
 <h2>Update IP of your domain</h2>
 <p>Let our server determine your IPv4 or IPv6 address (depending on whether you are using IPv4 or IPv6 to access <code>dnamer.net</code>, if you have IPv6 access, <code>curl</code> will use IPv6 by default):</p>
@@ -36,6 +36,7 @@ Run <code>crontab -e</code>, append a following line, save and exit (report IP e
 <p>Remove IPv6 record and keep IPv4 address unchanged:</p>
 <pre>curl -d "domain=$yourdomain&amp;token=$token&amp;ipv6=remove&amp;ipv4=keep" dnamer.net/update</pre>
 <p>The DNS record will be updated immediately. Due to DNS cache, it may take up to 10 seconds to take effect.
+<p>Please update IP address of your domain regularly. If you do not report IP address within 7 days (168 hours), your domain would be taken back and anyone else would be able to register it again.
 <h3>DNS update semantics (IPv4 for example)</h3>
 <pre>
 if ($ipv4 == "keep")
@@ -57,6 +58,7 @@ else  // client is connected via IPv6
 <ul>
 <li>When a new domain is applied, it is NOT reserved to you. (Others may take it as well) You must execute at least one "update" command to activate this domain.</li>
 <li>If you have tried to visit $yourdomain.dnamer.net prior to activation of the domain, the DNS system will have a negative cache and you won't be able to resolve the domain in an hour.</li>
+<li>Please update IP address of your domain regularly. If you do not report IP address within 7 days (168 hours), your domain would be taken back and anyone else would be able to register it again.</li>
 <li>All error messages start with "ERROR" and you may use it in automated scripts. The "new" command will return a token on success. The "update" command will return "OK" on success.</li>
 </ul>
 <hr />
