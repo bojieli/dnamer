@@ -12,7 +12,7 @@ if ($_POST['domain'] == "www")
 if (!preg_match("/^[a-z0-9][a-z0-9-]*[a-z0-9]$/", $_POST['domain']))
     die("ERROR: Domain should only contain lowercase letters, digits and '-'\n");
 
-$count = mysql_result(mysql_query("SELECT COUNT(*) FROM ddns WHERE domain='".addslashes($_POST['domain'])."' AND status='used'"), 0);
+$count = mysql_result(mysql_query("SELECT COUNT(*) FROM ddns WHERE domain='".addslashes($_POST['domain'])."' AND status='used' AND last_update >= SUBTIME(NOW(), '7 0:0:0')"), 0);
 if ($count > 0)
     die("ERROR: Sorry, the domain has been used\n");
 
