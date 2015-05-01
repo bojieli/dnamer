@@ -23,6 +23,9 @@ Run <code>crontab -e</code>, append a following line, save and exit (report IP e
 </ol>
 <h1>Usage Details</h1>
 <h2>Apply for a new domain</h2>
+<p>Use your own token (6 - 20 characters, letters and numbers only). This token will be stored in plaintext, do not use a valuable password.</p>
+<pre>curl -d "domain=$yourdomain&amp;token=$token" dnamer.net/new</pre>
+<p>Let us generate a random token for you:</p>
 <pre>token=$(curl -d "domain=$yourdomain" dnamer.net/new)</pre>
 <h2>Update IP of your domain</h2>
 <p>Let our server determine your IPv4 or IPv6 address (depending on whether you are using IPv4 or IPv6 to access <code>dnamer.net</code>, if you have IPv6 access, <code>curl</code> will use IPv6 by default):</p>
